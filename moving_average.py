@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from argparse import ArgumentParser
+import sys
  
 def process_image(img, convert=True):
     gray = img
@@ -10,6 +12,11 @@ def process_image(img, convert=True):
     return thresh
 
 def main():
+    parser = ArgumentParser()
+    parser.add_argument("-a", "--alpha", help="Set alpha value")
+    args = parser.parse_args()
+    alpha = float(args.alpha)
+
     cap = cv2.VideoCapture(0)
     _, img = cap.read()
     
@@ -20,7 +27,7 @@ def main():
         (grabbed, img) = cap.read()
         img_copy = img.copy()
     
-        cv2.accumulateWeighted(img, averageValue, 0.05)
+        cv2.accumulateWeighted(img, averageValue, alpha)
     
         movingAverage = cv2.convertScaleAbs(averageValue)
 
